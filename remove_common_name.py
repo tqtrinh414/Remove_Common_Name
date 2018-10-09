@@ -1,7 +1,7 @@
 import pandas as pd
+import csv
 
-
-def read_data(pathFile = './Company_names_2018_10_06.csv'):
+def read_data(pathFile):
     return pd.read_csv(pathFile)
 
 def remove_common(str):
@@ -9,31 +9,38 @@ def remove_common(str):
                   'private limited','jsc','etc']
     for word in library:
         if str.find(word) != -1:
-            str = str.replace(word, '')
+            str = str.replace(word, ' ')
     str = str.rstrip(' ')
     str = str.rstrip(',')
     return str
 
-def processing(dataframe):
+def write_dic_csv(dct, pathFo):
+    try:
+        df = pd.DataFrame.from_dict(dct)
+        df.to_csv(pathFo, index=False)
+    except IOError:
+        print('I/O error')
+        return False
+    else:
+        print('Done!')
+        return True
+
+def processing(pathFi, pathFo):
+    dataframe = read_data(pathFi)
     lst_company_id = list(dataframe['company_id'])
     lst_company_name = list(dataframe['company_name'])
     for i in range(len(lst_company_name)):
         lst_company_name[i] = remove_common(lst_company_name[i])
     
     dct = {}
-    for i in range(0, len(lst_company_id)):
-        dct[lst_company_id[i]] = lst_company_name[i]
-    return dct
+    dct['company_id'] = lst_company_id
+    dct['company_name'] = lst_company_name
+    write_dic_csv(dct, pathFo)
 
-def print_dic(dct):
-    for key in dct:
-        print(key, dct[key])
 
 
 def main():    
-    print(read_data())
-    dct = processing(read_data())
-    print_dic(dct)
+    processing('Company_names_2018_10_06.csv','common_name.csv')
 
 if __name__ == '__main__':
     main()
