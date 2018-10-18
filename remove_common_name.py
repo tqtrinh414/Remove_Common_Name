@@ -40,7 +40,6 @@ def processing(pathFi, pathFo):
 
 
 def main():
-    print("hello")
     processing('Company_names_2018_10_06.csv','common_name.csv')
 
 if __name__ == '__main__':
