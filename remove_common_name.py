@@ -37,8 +37,6 @@ def processing(pathFi, pathFo):
     dct['company_name'] = lst_company_name
     write_dic_csv(dct, pathFo)
 
-
-
 def main():
     processing('Company_names_2018_10_06.csv','common_name.csv')
 
